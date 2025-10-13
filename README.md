@@ -68,3 +68,43 @@ Energy: kJ/kg (kilojoules per kilogram), Kcal/h (kilocalories per hour).
 Data Quality Notes:
 Missing/Anomalous Values: Negative emissions readings (e.g., CO) may indicate sensor calibration artifacts.
 Precision: Values logged to 2–8 decimal places.
+
+┌─────────────────────────────────────────────────────────┐
+│          POWER PLANT SENSORS (58 parameters)            │
+│         Data every 10 minutes via SCADA/DCS             │
+└────────────────────┬────────────────────────────────────┘
+                     │
+                     ▼
+┌─────────────────────────────────────────────────────────┐
+│              DATA INGESTION LAYER                        │
+│  • Real-time data stream (MQTT/Kafka/API)               │
+│  • Data validation & preprocessing                       │
+│  • Feature normalization (using saved scaler)           │
+└────────────────────┬────────────────────────────────────┘
+                     │
+                     ▼
+┌─────────────────────────────────────────────────────────┐
+│              PINN INFERENCE ENGINE                       │
+│  • Pre-trained PINN model (loaded in memory)            │
+│  • Predict: Heat Rate + Emissions (<100ms)              │
+│  • Physics constraint validation                         │
+└────────┬───────────────────────────────┬────────────────┘
+         │                               │
+         ▼                               ▼
+┌──────────────────────┐      ┌──────────────────────────┐
+│  OPTIMIZATION ENGINE │      │  FAULT DETECTION ENGINE  │
+│  • Real-time setpoint│      │  • Anomaly detection     │
+│    recommendations   │      │  • Root cause analysis   │
+│  • Multi-objective   │      │  • Alert generation      │
+│    optimization      │      │  • Severity scoring      │
+└──────────┬───────────┘      └───────────┬──────────────┘
+           │                              │
+           └──────────────┬───────────────┘
+                          ▼
+           ┌──────────────────────────────┐
+           │    REAL-TIME DASHBOARD       │
+           │  • Live predictions          │
+           │  • Optimization suggestions  │
+           │  • Fault alerts              │
+           │  • Historical trends         │
+           └──────────────────────────────┘
